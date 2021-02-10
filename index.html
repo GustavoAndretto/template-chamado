@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./layout/main/css/style.css">
+    <link rel="stylesheet" href="./assets/materialize-master/css/materialize.css">
+    <link rel="stylesheet" href="./assets/materialize-master/css/materialize.icons.css">
+
+    <link rel="stylesheet" href="./assets/fontawesome-free-5.15.2-web/css/all.min.css">
+    <link rel="stylesheet" href="./assets/fontawesome-free-5.15.2-web/js/all.min.js">
+
+    <script type="text/javascript" src="./assets/materialize-master/js/materialize.js"></script>
+    <title>Gerador de template para descrição de chamados</title>
+</head>
+<body>
+    <h3 class="text-center">Gerador de template para descrição de chamados</h3>
+    <div class="centralize">
+        <form id="form" class="row s12">
+            <div class="col s12 right-align">
+            </div>
+            <div class="input-field col s6">
+                <input id="name" type="text">
+                <label for="name">Nome Completo</label>
+            </div>
+            <div class="input-field col s6">
+                <input id="netUser" type="text">
+                <label for="netUser">Usuário de Rede</label>
+            </div>
+            <div class="input-field col s6">
+                <input id="employeeId" type="number">
+                <label for="employeeId">Matrícula</label>
+            </div>
+            <div class="input-field col s6">
+                <input id="phone" type="tel">
+                <label for="phone">Telefone</label>
+            </div>
+            <div class="input-field col s12">
+                <textarea id="help" class="materialize-textarea"></textarea>
+                <label for="help">Solicitação do Usuário</label>
+            </div>
+            <div class="input-field col s12">
+                <textarea id="troubleshooting" class="materialize-textarea"></textarea>
+                <label for="troubleshooting">Troubleshooting</label>
+            </div>
+            <div class="input-field col s12">
+                <textarea id="note" class="materialize-textarea"></textarea>
+                <label for="note">Observações</label>
+            </div>
+            <div class="input-field col s6">
+                <input id="avaliable" type="text">
+                <label for="avaliable">Horário Disponível</label>
+            </div>
+            <div class="input-field col s6">
+                <select id="locale">
+                  <option value="" disabled selected>Selecione</option>
+                  <option value="1">Home Office</option>
+                  <option value="2">Escritório</option>
+                  <option value="3">Cliente</option>
+                </select>
+                <label>Local de Trabalho</label>
+            </div>
+            <div class="input-field col s12">
+                <input id="address" type="text">
+                <label for="address">Endereço</label>
+            </div>
+            <div class="input-field col s4">
+                <input id="callStart" type="text" class="timepicker">
+                <label for="callStart">Início do Atendimento</label>
+            </div>
+            <div class="input-field col s4">
+                <input id="callEnd" type="text" class="timepicker">
+                <label for="callEnd">Fim do Atendimento</label>
+            </div>
+            <div class="input-field col s4">
+                <input id="callNum" type="number">
+                <label for="callNum">Número do Chamado</label>
+            </div>
+            <div class="input-field col s12">
+                <textarea id="template" class="materialize-textarea monospace"></textarea>
+                <label for="template">Template</label>
+            </div>
+            <div id="buttons" class="col s12">
+                <a id="btnGenerate" class="waves-effect waves-light btn-large">
+                    <i class="material-icons dp48">send</i>
+                    <span>Gerar</span>
+                </a>
+                <a id="btnCopy" class="waves-effect waves-light btn-large">
+                    <i class="material-icons dp48">content_copy</i>
+                    <span>Copiar</span>
+                </a>
+                <a id="btnSave" class="waves-effect waves-light btn-large" disabled>
+                    <i class="material-icons dp48">save</i>
+                    <span>Salvar</span>
+                </a>
+                <a id="btnClear" class="waves-effect waves-light btn-large red lighten-1">
+                    <i class="material-icons dp48">close</i>
+                    <span>Limpar</span>
+                </a>
+            </div>
+        </form>
+    </div>
+    <footer class="footer text-center">
+        <span class="desc">Made by <a class="gb-lnk desc flex flex-align-center" href="https://github.com/gustavoandretto" target="_blank" rel="noopener noreferrer"><span class="gh-ico" aria-hidden="true"></span>Gustavo Andretto</a>. Last updated Fev 10, 2021.</span>
+    </footer>
+    <script src="./code//RobinHerbots/inputmask.min.js"></script>
+    <script src="./code/main.js"></script>
+</body>
+</html>
