@@ -72,7 +72,7 @@ function updateTemplate()
     elements.template.focus();
     M.textareaAutoResize(elements.template);
 
-    M.toast({html: '<i class="material-icons dp48">send</i>&nbsp;Gerado.'});
+    M.toast({html: 'Template gerado<i class="material-icons dp48">check</i>'});
 }
 
 function copyToClipboard(){
@@ -83,29 +83,46 @@ function copyToClipboard(){
 
     document.execCommand("copy");
 
-    M.toast({html: '<i class="material-icons dp48">content_copy</i>Copiado.'});
+    M.toast({html: 'Copiado para área de transferência<i class="material-icons dp48">check</i>'});
 }
 
 function save() {
     
     if(elements.callNum.value) {
-        M.toast({html: "<i class=\"material-icons dp48\">save</i> O Chamado de número " + elements.callNum.value + " foi salvo."});
+        M.toast({html: 'Funcionalidade Indisponível<i class=\"material-icons dp48\">close</i>', classes: 'red lighten-1'});
     }
     else{
-        M.toast({html: "<i class=\"material-icons dp48\">error_outline</i> Insira o número do chamado."});
+        M.toast({html: 'Insira o número do chamado<i class=\"material-icons dp48\">close</i>', classes: 'red lighten-1'});
     }
 }
 
 function clear() {
-    M.toast({html: '<i class="material-icons dp48">close</i> Limpo'});
+    elements.name.value = null;
+    elements.netUser.value = null;
+    elements.employeeId.value = null;
+    elements.phone.value = null;
+    elements.help.value = null;
+    elements.troubleshooting.value = null;
+    elements.note.value = null;
+    elements.locale.selectedIndex = null;
+    elements.avaliable.value = null;
+    elements.address.value = null;
+    elements.callStart.value = formatTime(new Date());
+    elements.callEnd.value = null;
+    elements.callNum.value = null;
+    elements.template.value = null;
 
-    window.location.reload();
+    M.FormSelect.init(elements.locale);
+    M.updateTextFields();
+    M.textareaAutoResize(elements.template);
+    M.textareaAutoResize(elements.help);
+    M.textareaAutoResize(elements.note);
+    M.textareaAutoResize(elements.troubleshooting);
+    M.toast({html: 'Limpeza concluída<i class="material-icons dp48">check</i>'});    
 }
 
 function initialize()
 {
-    var file = new FileReader();
-
     elements.phone.addEventListener("focus", function() {
         phoneMask.mask(elements.phone);
     });
