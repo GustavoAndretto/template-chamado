@@ -20,7 +20,18 @@
                             <v-toolbar color="primary" dense>
                                 <v-btn @click="saveTemplate()" :disabled="!template.input" dark dense outlined><v-icon left>mdi-content-save</v-icon>salvar template</v-btn>
                                 <v-spacer></v-spacer>
-                                <v-combobox v-model="template.input" :items="template.items" @input.native="template.input=$event.srcElement.value" @change="selectTemplate()" label="Selecionar Template" dark hide-details dense solo></v-combobox>
+                                <v-combobox v-model="template.input" :items="template.items" @input.native="template.input=$event.srcElement.value" @change="view.confirmSelection = true" label="Selecionar Template" dark hide-details dense solo></v-combobox>
+                                <v-dialog v-model="view.confirmSelection" persistent width="unset">
+                                    <v-card>
+                                        <v-card-title>
+                                            Deseja manter as informações do profissional?
+                                        </v-card-title>
+                                        <v-card-actions class="justify-end">
+                                            <v-btn @click="confirmSelection(true)" text color="primary" small>sim</v-btn>
+                                            <v-btn @click="confirmSelection(false)" text color="primary" small>não</v-btn>
+                                        </v-card-actions>
+                                    </v-card>
+                                </v-dialog>
                                 <v-spacer></v-spacer>
                                 <v-btn @click="deleteTemplate()" :disabled="!template.input" dark dense outlined><v-icon left>mdi-delete</v-icon>excluir template</v-btn>
                             </v-toolbar>
@@ -39,12 +50,12 @@
                                         <v-text-field v-model="form.employee.id" type="number" label="Matrícula" prepend-icon="mdi-badge-account-horizontal-outline" hide-details="auto"></v-text-field>
                                     </v-col>
                                     <v-col>
-                                        <v-text-field v-model="form.employee.phone" v-mask="mask.phone" label="Telefone" prepend-icon="mdi-phone-outline" hide-details="auto"></v-text-field>
+                                        <v-text-field v-model="form.employee.phone" v-if="view.fixMaskedFields" v-mask="mask.phone" label="Telefone" prepend-icon="mdi-phone-outline" hide-details="auto"></v-text-field>
                                     </v-col>
                                 </v-row>
                                 <v-row>
                                     <v-col>
-                                        <v-text-field v-model="form.employee.time" v-mask="mask.workTime" label="Horário de Trabalho" prepend-icon="mdi-briefcase-clock-outline" hide-details="auto"></v-text-field>
+                                        <v-text-field v-model="form.employee.time" v-if="view.fixMaskedFields" v-mask="mask.workTime" label="Horário de Trabalho" prepend-icon="mdi-briefcase-clock-outline" hide-details="auto"></v-text-field>
                                     </v-col>
                                     <v-col>
                                         <v-select v-model="form.employee.location.desc" label="Local de Trabalho" prepend-icon="mdi-office-building-marker-outline" :items="placeholder.workLocation" hide-details="auto"></v-select>
@@ -62,7 +73,7 @@
                                                     <v-card-text>
                                                         <v-row>
                                                             <v-col cols="3">
-                                                                <v-text-field v-model="form.employee.location.cep" v-mask="mask.cep" label="CEP" @blur="cepChanged(form.employee.location.cep)" :error-messages="error.cep" :rules="[v => !!v || 'Insira o CEP']" required></v-text-field>
+                                                                <v-text-field v-model="form.employee.location.cep" v-if="view.fixMaskedFields" v-mask="mask.cep" label="CEP" @blur="cepChanged(form.employee.location.cep)" :error-messages="error.cep" :rules="[v => !!v || 'Insira o CEP']" required></v-text-field>
                                                             </v-col>
                                                             <v-col cols="2">
                                                                 <v-text-field v-model="form.employee.location.state" label="UF" disabled></v-text-field>

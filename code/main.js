@@ -1,10 +1,6 @@
 var dbTemplate = localforage.createInstance({ name: 'Template' });
 var dbConfig = localforage.createInstance({ name: 'Config' });
 
-function formatLocation(street, number, misc, neighborhood, city, state, cep) {
-    return `${street}, ${number} ${misc}, ${neighborhood}, ${city} - ${state} - CEP ${cep}`;
-}
-
 new Vue({ 
     el: '#app', 
     vuetify: new Vuetify({
@@ -16,7 +12,7 @@ new Vue({
             author: "Gustavo Andretto",
             page: "https://github.com/gustavoandretto",
             version: "0.2",
-            revision: "Sep, 16, 2021"
+            revision: "Sep, 20, 2021"
         },
         mask: {
             phone: '+55 (##) #####-####',
@@ -54,15 +50,32 @@ new Vue({
                 }
             }
         },
-        placeholder: { workLocation: ['Home Office', 'Cliente', 'Escritório'] },
-        error: { cep: [] },
-        view: { address: false, template: false },
-        validator: { address: false },
-        template: { input: null, items: [], text: null }
+        placeholder: { 
+            workLocation: ['Home Office', 'Cliente', 'Escritório'] 
+        },
+        error: { 
+            cep: [] 
+        },
+        view: { 
+            address: false, 
+            template: false, 
+            confirmSelection: false, 
+            fixMaskedFields: true 
+        },
+        validator: { 
+            address: false 
+        },
+        template: { 
+            input: null, 
+            items: [], 
+            text: null }
     },
     methods: {
         resetForm() {
             this.$refs.form.reset();
+        },
+        formatLocation(street, number, misc, neighborhood, city, state, cep) {
+            return `${street}, ${number} ${misc}, ${neighborhood}, ${city} - ${state} - CEP ${cep}`;
         },
         cepChanged(value) {
             if(value.length == this.mask.cep.length) {
@@ -83,15 +96,26 @@ new Vue({
 
             this.error.cep = ['CEP inválido'];
         },
-        updateForm(value) {
-            if(value) { 
-                this.form = value; 
+        updateForm(value, keepEmployeeInfo) {
+            if(value) {
+                if(keepEmployeeInfo) {
+                    value.employee = this.form.employee;
+                }
+
+                this.form = value;
             }
         },
         initDefault() {
             // TODO:
         },
+        fixMaskedFields() {
+            // Hack para atualizar campos que utilizam v-mask após a limpeza do input
+            this.view.fixMaskedFields = false;
+            this.$nextTick(() => { this.view.fixMaskedFields = true; });
+        },
         clearForm() {
+            //this.$refs.form.phone = '+55 (00) 00000-0000';
+ 
             this.$refs.form.reset();
 
             if(this.$refs.formAddress){
@@ -101,6 +125,8 @@ new Vue({
                 // Reseta os erros de validação do cep.
                 this.error.cep = [];
             }
+
+            this.fixMaskedFields();
         },
         insertAddress() {
             this.$refs.formAddress.validate();
@@ -108,7 +134,7 @@ new Vue({
             if(this.form.employee.location.number && this.form.employee.location.cep) {
                 var location = this.form.employee.location;
 
-                this.form.employee.location.all = formatLocation(location.street, location.number, !location.misc ? '' : location.misc,
+                this.form.employee.location.all = this.formatLocation(location.street, location.number, !location.misc ? '' : location.misc,
                 location.neighborhood, location.city, location.state, location.cep);
 
                 this.view.address = false;
@@ -164,9 +190,6 @@ new Vue({
             if(this.form.employee.location.desc) {
                 strTemplate += "•Local de Trabalho: " + this.form.employee.location.desc + "\n\n";
             }
-
-            console.log(this.form.ticket.description);
-
             if(this.form.ticket.description) {
                 strTemplate += "•Descrição do Problema:\n" + this.form.ticket.description + "\n\n";
             }
@@ -175,6 +198,11 @@ new Vue({
             }
             if(this.form.ticket.note) {
                 strTemplate += "•Observações:\n" + this.form.ticket.note;
+            }
+
+            // Remove a(s) quebra(s) de linha no final.
+            while(strTemplate.charAt(strTemplate.length - 1) == '\n') {
+                strTemplate = strTemplate.substring(0, strTemplate.length - 1);
             }
 
             this.template.text = strTemplate;
@@ -197,12 +225,16 @@ new Vue({
                 });
             }
         },
-        selectTemplate() {
-            if(this.template.input) {
+        selectTemplate(keepEmployeeInfo) {
                 dbTemplate.getItem(this.template.input).then((value) => {
                     // Atualiza o formulário com o template selecionado.
-                    this.updateForm(value);
+                    this.updateForm(value, keepEmployeeInfo);
                 });
+        },
+        confirmSelection(keepEmployeeInfo) {
+            if(this.template.input) {   
+                this.selectTemplate(keepEmployeeInfo);
+                this.view.confirmSelection = false;
             }
         },
         showPage() {
